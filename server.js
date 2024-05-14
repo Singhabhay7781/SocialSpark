@@ -1,3 +1,4 @@
+import express from "express";
 import { Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -6,6 +7,9 @@ import connectDB from "./src/config/db.js";
 
 import eventModel from "./src/models/Event.js";
 
+const port = 8080;
+
+const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
@@ -141,3 +145,11 @@ bot.launch();
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.listen(port, () => {
+  console.log(`app is listening on port ${port}`);
+});
